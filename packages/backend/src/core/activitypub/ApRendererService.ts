@@ -285,7 +285,7 @@ export class ApRendererService {
 				if (instance && instance.softwareName === 'pleroma') isMastodon = true;
 			}
 		}
-		
+
 		const object: ILike = {
 			type: 'Like',
 			id: `${this.config.url}/likes/${noteReaction.id}`,
@@ -451,9 +451,15 @@ export class ApRendererService {
 				_misskey_content: text,
 				source: {
 					content: text,
+					contentMap: note.lang ? {
+						[note.lang]: text,
+					} : undefined,
 					mediaType: 'text/x.misskeymarkdown',
 				},
 			}),
+			contentMap: note.lang && content ? {
+				[note.lang]: content,
+			} : undefined,
 			_misskey_quote: quote,
 			quoteUrl: quote,
 			quoteUri: quote,
@@ -743,9 +749,15 @@ export class ApRendererService {
 				_misskey_content: text,
 				source: {
 					content: text,
+					contentMap: note.lang ? {
+						[note.lang]: text,
+					} : undefined,
 					mediaType: 'text/x.misskeymarkdown',
 				},
 			}),
+			contentMap: note.lang && content ? {
+				[note.lang]: content,
+			} : undefined,
 			_misskey_quote: quote,
 			quoteUrl: quote,
 			quoteUri: quote,

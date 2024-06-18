@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<i v-if="column.tl === 'home'" class="ph-house ph-bold ph-lg"></i>
 		<i v-else-if="column.tl === 'local'" class="ph-planet ph-bold ph-lg"></i>
 		<i v-else-if="column.tl === 'social'" class="ph-rocket-launch ph-bold ph-lg"></i>
-		<i v-else-if="column.tl === 'bubble'" class="ph-thumb-up ph-bold ph-lg"></i>
+		<i v-else-if="column.tl === 'bubble'" class="ph-heart ph-bold ph-lg"></i>
 		<i v-else-if="column.tl === 'global'" class="ph-globe-hemisphere-west ph-bold ph-lg"></i>
 		<span style="margin-left: 8px;">{{ column.name }}</span>
 	</template>

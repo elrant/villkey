@@ -37,8 +37,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<span v-else><i class="ph-rocket ph-bold ph-lg"></i></span>
 			</button>
 			<button v-click-anime v-tooltip="i18n.ts.reactionAcceptance" class="_button" :class="[$style.headerRightItem, { [$style.danger]: reactionAcceptance === 'likeOnly' }]" @click="toggleReactionAcceptance">
-				<span v-if="reactionAcceptance === 'likeOnly'"><i class="ph-heart ph-bold ph-lg"></i></span>
-				<span v-else-if="reactionAcceptance === 'likeOnlyForRemote'"><i class="ph-heart ph-bold ph-lg"></i></span>
+				<span v-if="reactionAcceptance === 'likeOnly'"><i class="ph-star ph-bold ph-lg"></i></span>
+				<span v-else-if="reactionAcceptance === 'likeOnlyForRemote'"><i class="ph-star ph-bold ph-lg"></i></span>
 				<span v-else><i class="ph-smiley ph-bold ph-lg"></i></span>
 			</button>
 			<button v-click-anime class="_button" :class="$style.submit" :disabled="!canPost" data-cy-open-post-form-submit @click="post">
@@ -745,7 +745,7 @@ async function post(ev?: MouseEvent) {
 			visibility.value = 'home';
 		}
 	}
-	
+
 	if (defaultStore.state.warnMissingAltText) {
 		const filesData = toRaw(files.value);
 
@@ -765,7 +765,7 @@ async function post(ev?: MouseEvent) {
 			});
 
 			if (canceled) return;
-			if (result === 'cancel') return;	
+			if (result === 'cancel') return;
 		}
 	}
 

@@ -61,13 +61,13 @@
 					<i class="ph-arrow-u-up-left ph-bold ph-lg"></i>
 				</button>
 				<button class="_button" :class="$style.noteFooterButton">
-					<i class="ph-rocket-launch ph-bold ph-lg"></i>
+					<i class="ph-repeat ph-bold ph-lg"></i>
 				</button>
 				<button class="_button" :class="$style.noteFooterButton">
 					<i class="ph-quotes ph-bold ph-lg"></i>
 				</button>
 				<button class="_button" :class="$style.noteFooterButton">
-					<i class="ph-heart ph-bold ph-lg"></i>
+					<i class="ph-star ph-bold ph-lg"></i>
 				</button>
 			</footer>
 		</article>

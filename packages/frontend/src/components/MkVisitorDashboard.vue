@@ -102,7 +102,7 @@ function showMenu(ev) {
 		},
 	}, {
 		text: i18n.ts.aboutMisskey,
-		icon: 'sk-icons sk-shark ph-bold',
+		icon: 'ph-city ph-bold',
 		action: () => {
 			os.pageWindow('/about-sharkey');
 		},

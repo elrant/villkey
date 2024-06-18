@@ -20,7 +20,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<MkNoteSub v-if="appearNote.reply" :note="appearNote.reply" :class="$style.replyTo" :expandAllCws="props.expandAllCws"/>
 	<div v-if="isRenote" :class="$style.renote">
 		<MkAvatar :class="$style.renoteAvatar" :user="note.user" link preview/>
-		<i class="ph-rocket-launch ph-bold ph-lg" style="margin-right: 4px;"></i>
+		<i class="ph-repeatph-bold ph-lg" style="margin-right: 4px;"></i>
 		<span :class="$style.renoteText">
 			<I18n :src="i18n.ts.renotedBy" tag="span">
 				<template #user>
@@ -126,7 +126,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:style="renoted ? 'color: var(--accent) !important;' : ''"
 				@mousedown="renoted ? undoRenote() : boostVisibility()"
 			>
-				<i class="ph-rocket-launch ph-bold ph-lg"></i>
+				<i class="ph-repeat ph-bold ph-lg"></i>
 				<p v-if="appearNote.renoteCount > 0" :class="$style.noteFooterButtonCount">{{ appearNote.renoteCount }}</p>
 			</button>
 			<button v-else class="_button" :class="$style.noteFooterButton" disabled>
@@ -142,10 +142,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<i class="ph-quotes ph-bold ph-lg"></i>
 			</button>
 			<button v-if="appearNote.myReaction == null && appearNote.reactionAcceptance !== 'likeOnly'" ref="likeButton" :class="$style.noteFooterButton" class="_button" @mousedown="like()">
-				<i class="ph-heart ph-bold ph-lg"></i>
+				<i class="ph-star ph-bold ph-lg"></i>
 			</button>
 			<button v-if="appearNote.myReaction == null" ref="reactButton" :class="$style.noteFooterButton" class="_button" @mousedown="react()">
-				<i v-if="appearNote.reactionAcceptance === 'likeOnly'" class="ph-heart ph-bold ph-lg"></i>
+				<i v-if="appearNote.reactionAcceptance === 'likeOnly'" class="ph-star ph-bold ph-lg"></i>
 				<i v-else class="ph-smiley ph-bold ph-lg"></i>
 			</button>
 			<button v-if="appearNote.myReaction != null" ref="reactButton" class="_button" :class="[$style.noteFooterButton, $style.reacted]" @click="undoReact(appearNote)">
@@ -161,7 +161,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</article>
 	<div :class="$style.tabs">
 		<button class="_button" :class="[$style.tab, { [$style.tabActive]: tab === 'replies' }]" @click="tab = 'replies'"><i class="ph-arrow-u-up-left ph-bold ph-lg"></i> {{ i18n.ts.replies }}</button>
-		<button class="_button" :class="[$style.tab, { [$style.tabActive]: tab === 'renotes' }]" @click="tab = 'renotes'"><i class="ph-rocket-launch ph-bold ph-lg"></i> {{ i18n.ts.renotes }}</button>
+		<button class="_button" :class="[$style.tab, { [$style.tabActive]: tab === 'renotes' }]" @click="tab = 'renotes'"><i class="ph-repeat ph-bold ph-lg"></i> {{ i18n.ts.renotes }}</button>
 		<button class="_button" :class="[$style.tab, { [$style.tabActive]: tab === 'quotes' }]" @click="tab = 'quotes'"><i class="ph-quotes ph-bold ph-lg"></i> {{ i18n.ts._notification._types.quote }}</button>
 		<button class="_button" :class="[$style.tab, { [$style.tabActive]: tab === 'reactions' }]" @click="tab = 'reactions'"><i class="ph-smiley ph-bold ph-lg"></i> {{ i18n.ts.reactions }}</button>
 	</div>

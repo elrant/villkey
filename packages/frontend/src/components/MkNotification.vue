@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkAvatar v-if="['pollEnded', 'note', 'edited'].includes(notification.type) && notification.note" :class="$style.icon" :user="notification.note.user" link preview/>
 		<MkAvatar v-else-if="['roleAssigned', 'achievementEarned'].includes(notification.type)" :class="$style.icon" :user="$i" link preview/>
 		<div v-else-if="notification.type === 'reaction:grouped'" :class="[$style.icon, $style.icon_reactionGroup]"><i class="ph-smiley ph-bold ph-lg" style="line-height: 1;"></i></div>
-		<div v-else-if="notification.type === 'renote:grouped'" :class="[$style.icon, $style.icon_renoteGroup]"><i class="ph-rocket-launch ph-bold ph-lg" style="line-height: 1;"></i></div>
+		<div v-else-if="notification.type === 'renote:grouped'" :class="[$style.icon, $style.icon_renoteGroup]"><i class="ph-repeat ph-bold ph-lg" style="line-height: 1;"></i></div>
 		<img v-else-if="notification.type === 'test'" :class="$style.icon" :src="infoImageUrl"/>
 		<MkAvatar v-else-if="notification.user" :class="$style.icon" :user="notification.user" link preview/>
 		<img v-else-if="notification.icon" :class="[$style.icon, $style.icon_app]" :src="notification.icon" alt=""/>
@@ -31,7 +31,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<i v-if="notification.type === 'follow'" class="ph-plus ph-bold ph-lg"></i>
 			<i v-else-if="notification.type === 'receiveFollowRequest'" class="ph-clock ph-bold ph-lg"></i>
 			<i v-else-if="notification.type === 'followRequestAccepted'" class="ph-check ph-bold ph-lg"></i>
-			<i v-else-if="notification.type === 'renote'" class="ph-rocket-launch ph-bold ph-lg"></i>
+			<i v-else-if="notification.type === 'renote'" class="ph-repeat ph-bold ph-lg"></i>
 			<i v-else-if="notification.type === 'reply'" class="ph-arrow-u-up-left ph-bold ph-lg"></i>
 			<i v-else-if="notification.type === 'mention'" class="ph-at ph-bold ph-lg"></i>
 			<i v-else-if="notification.type === 'quote'" class="ph-quotes ph-bold ph-lg"></i>

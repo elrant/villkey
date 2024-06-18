@@ -19,7 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<div v-if="isRenote" :class="$style.renote">
 		<div v-if="note.channel" :class="$style.colorBar" :style="{ background: note.channel.color }"></div>
 		<MkAvatar :class="$style.renoteAvatar" :user="note.user" link preview/>
-		<i class="ph-rocket-launch ph-bold ph-lg" style="margin-right: 4px;"></i>
+		<i class="ph-repeat ph-bold ph-lg" style="margin-right: 4px;"></i>
 		<I18n :src="i18n.ts.renotedBy" tag="span" :class="$style.renoteText">
 			<template #user>
 				<MkA v-user-preview="note.userId" :class="$style.renoteUserName" :to="userPage(note.user)">
@@ -116,7 +116,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					@click.stop
 					@mousedown="renoted ? undoRenote(appearNote) : boostVisibility()"
 				>
-					<i class="ph-rocket-launch ph-bold ph-lg"></i>
+					<i class="ph-repeat ph-bold ph-lg"></i>
 					<p v-if="appearNote.renoteCount > 0" :class="$style.footerButtonCount">{{ appearNote.renoteCount }}</p>
 				</button>
 				<button v-else :class="$style.footerButton" class="_button" disabled>
@@ -133,10 +133,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<i class="ph-quotes ph-bold ph-lg"></i>
 				</button>
 				<button v-if="appearNote.myReaction == null && appearNote.reactionAcceptance !== 'likeOnly'" ref="likeButton" :class="$style.footerButton" class="_button" @click.stop @click="like()">
-					<i class="ph-heart ph-bold ph-lg"></i>
+					<i class="ph-star ph-bold ph-lg"></i>
 				</button>
 				<button v-if="appearNote.myReaction == null" ref="reactButton" :class="$style.footerButton" class="_button" @mousedown="react()">
-					<i v-if="appearNote.reactionAcceptance === 'likeOnly'" class="ph-heart ph-bold ph-lg"></i>
+					<i v-if="appearNote.reactionAcceptance === 'likeOnly'" class="ph-star ph-bold ph-lg"></i>
 					<i v-else class="ph-smiley ph-bold ph-lg"></i>
 				</button>
 				<button v-if="appearNote.myReaction != null" ref="reactButton" :class="$style.footerButton" class="_button" @click.stop @click="undoReact(appearNote)">

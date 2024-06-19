@@ -5799,7 +5799,7 @@ export interface Locale extends ILocale {
             };
             "_notes100000": {
                 /**
-                 * ALL YOUR NOTE ARE BELONG TO US
+                 * ALL YOUR VEET ARE BELONG TO US
                  */
                 "title": string;
                 /**

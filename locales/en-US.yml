@@ -1463,7 +1463,7 @@ _achievements:
       title: "Veet universe"
       description: "Post 90,000 veets"
     _notes100000:
-      title: "ALL YOUR NOTE ARE BELONG TO US"
+      title: "ALL YOUR VEET ARE BELONG TO US"
       description: "Post 100,000 veets"
       flavor: "You sure have a lot to say."
     _login3:
@@ -1837,7 +1837,7 @@ _aboutMisskey:
   original: "Misskey original"
   original_sharkey: "Sharkey original"
   thisIsModifiedVersion: "{name} uses a modified version of the original Sharkey."
-  translation: "Translate Villkey"
+  translation: "Translate Sharkey"
   donate: "Donate to Misskey"
   donate_sharkey: "Donate to Sharkey"
   morePatrons: "We also appreciate the support of many other helpers not listed here. Thank you! 🥰"
@@ -2478,7 +2478,7 @@ _moderationLogTypes:
   unsetUserAvatar: "Unset this user's avatar"
   unsetUserBanner: "Unset this user's banner"
 _mfm:
-  intro: "MFM is a markup language used on Villkey, Misskey, Sharkey, Firefish, Akkoma, and more that can be used in many places. Here you can view a list of all available MFM syntax."
+  intro: "MFM is a markup language used on Villkey, Misskey, Sharkey, Firefish, Akkoma, and more! Here you can view a list of all available MFM syntax."
   dummy: "Villkey expands the world of the Fediverse"
   mention: "Mention"
   mentionDescription: "You can specify a user by using an At-Symbol and a username."

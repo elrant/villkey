@@ -128,7 +128,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					@click.stop
 					@mousedown="renoted ? undoRenote(appearNote) : boostVisibility()"
 				>
-					<i class="ph-rocket-launch ph-bold ph-lg"></i>
+					<i class="ph-repeat ph-bold ph-lg"></i>
 					<p v-if="appearNote.renoteCount > 0" :class="$style.footerButtonCount">{{ number(appearNote.renoteCount) }}</p>
 				</button>
 				<button v-else :class="$style.footerButton" class="_button" disabled>

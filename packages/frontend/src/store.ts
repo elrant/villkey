@@ -234,7 +234,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	serverDisconnectedBehavior: {
 		where: 'device',
-		default: 'disabled' as 'quiet' | 'dialog' | 'disabled',
+		default: 'dialog' as 'quiet' | 'dialog' | 'disabled',
 	},
 	nsfw: {
 		where: 'device',
@@ -242,7 +242,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	highlightSensitiveMedia: {
 		where: 'device',
-		default: false,
+		default: true,
 	},
 	animation: {
 		where: 'device',
@@ -250,7 +250,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	animatedMfm: {
 		where: 'device',
-		default: false,
+		default: true,
 	},
 	advancedMfm: {
 		where: 'device',
@@ -262,7 +262,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	loadRawImages: {
 		where: 'device',
-		default: false,
+		default: true,
 	},
 	warnMissingAltText: {
 		where: 'device',
@@ -322,7 +322,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	darkMode: {
 		where: 'device',
-		default: false,
+		default: true,
 	},
 	instanceTicker: {
 		where: 'device',
@@ -366,7 +366,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	squareAvatars: {
 		where: 'device',
-		default: true,
+		default: false,
 	},
 	showAvatarDecorations: {
 		where: 'device',

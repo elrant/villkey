@@ -1,7 +1,7 @@
 {
 	"name": "villkey",
 	"codename": "veeter",
-	"version": "2024.5.0-dev",
+	"version": "2024.5.1",
 	"repository": {
 		"type": "git",
 		"url": "https://activitypub.software/TransFem-org/Sharkey.git"

@@ -298,7 +298,15 @@ export class NoteEditService implements OnApplicationShutdown {
 			data.visibility = 'home';
 		}
 
+<<<<<<< HEAD
 		if (data.renote) {
+=======
+		if (this.isRenote(data)) {
+			if (data.renote.id === oldnote.id) {
+				throw new Error("A note can't renote itself");
+			}
+
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 			switch (data.renote.visibility) {
 				case 'public':
 					// public noteは無条件にrenote可能
@@ -524,6 +532,7 @@ export class NoteEditService implements OnApplicationShutdown {
 						noteVisibility: note.visibility,
 						userId: user.id,
 						userHost: user.host,
+						channelId: data.channel ? data.channel.id : null,
 					});
 
 					if (!oldnote.hasPoll) {

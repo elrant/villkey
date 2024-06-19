@@ -77,8 +77,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</header>
 		<div :class="$style.noteContent">
 			<p v-if="appearNote.cw != null" :class="$style.cw">
+<<<<<<< HEAD
 				<Mfm v-if="appearNote.cw != ''" style="margin-right: 8px;" :text="appearNote.cw" :author="appearNote.user" :nyaize="'respect'"/>
 				<MkCwButton v-model="showContent" :text="appearNote.text" :files="appearNote.files" :poll="appearNote.poll"/>
+=======
+				<Mfm v-if="appearNote.cw != ''" style="margin-right: 8px;" :text="appearNote.cw" :isBlock="true" :author="appearNote.user" :nyaize="'respect'"/>
+				<MkCwButton v-model="showContent" :text="appearNote.text" :renote="appearNote.renote" :files="appearNote.files" :poll="appearNote.poll"/>
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 			</p>
 			<div v-show="appearNote.cw == null || showContent">
 				<span v-if="appearNote.isHidden" style="opacity: 0.5">({{ i18n.ts.private }})</span>
@@ -92,13 +97,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 					:enableEmojiMenu="true"
 					:enableEmojiMenuReaction="true"
 					:isAnim="allowAnim"
+					:isBlock="true"
 				/>
 				<a v-if="appearNote.renote != null" :class="$style.rn">RN:</a>
 				<div v-if="translating || translation" :class="$style.translation">
 					<MkLoading v-if="translating" mini/>
 					<div v-else-if="translation">
 						<b>{{ i18n.tsx.translatedFrom({ x: translation.sourceLang }) }}: </b>
-						<Mfm :text="translation.text" :author="appearNote.user" :nyaize="'respect'" :emojiUrls="appearNote.emojis"/>
+						<Mfm :text="translation.text" :isBlock="true" :author="appearNote.user" :nyaize="'respect'" :emojiUrls="appearNote.emojis"/>
 					</div>
 				</div>
 				<MkButton v-if="!allowAnim && animated" :class="$style.playMFMButton" :small="true" @click="animatedMFM()" @click.stop><i class="ph-play ph-bold ph-lg "></i> {{ i18n.ts._animatedMFM.play }}</MkButton>
@@ -152,12 +158,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<button v-if="appearNote.myReaction == null && appearNote.reactionAcceptance !== 'likeOnly'" ref="likeButton" :class="$style.noteFooterButton" class="_button" @mousedown="like()">
 				<i class="ph-star ph-bold ph-lg"></i>
 			</button>
+<<<<<<< HEAD
 			<button v-if="appearNote.myReaction == null" ref="reactButton" :class="$style.noteFooterButton" class="_button" @mousedown="react()">
 				<i v-if="appearNote.reactionAcceptance === 'likeOnly'" class="ph-star ph-bold ph-lg"></i>
 				<i v-else class="ph-smiley ph-bold ph-lg"></i>
 			</button>
 			<button v-if="appearNote.myReaction != null" ref="reactButton" class="_button" :class="[$style.noteFooterButton, $style.reacted]" @click="undoReact(appearNote)">
 				<i class="ph-minus ph-bold ph-lg"></i>
+=======
+			<button ref="reactButton" :class="$style.noteFooterButton" class="_button" @click="toggleReact()">
+				<i v-if="appearNote.reactionAcceptance === 'likeOnly' && appearNote.myReaction != null" class="ph-heart ph-bold ph-lg" style="color: var(--eventReactionHeart);"></i>
+				<i v-else-if="appearNote.myReaction != null" class="ph-minus ph-bold ph-lg" style="color: var(--accent);"></i>
+				<i v-else-if="appearNote.reactionAcceptance === 'likeOnly'" class="ph-heart ph-bold ph-lg"></i>
+				<i v-else class="ph-smiley ph-bold ph-lg"></i>
+				<p v-if="(appearNote.reactionAcceptance === 'likeOnly' || defaultStore.state.showReactionsCount) && appearNote.reactionCount > 0" :class="$style.noteFooterButtonCount">{{ number(appearNote.reactionCount) }}</p>
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 			</button>
 			<button v-if="defaultStore.state.showClipButtonInNoteFooter" ref="clipButton" class="_button" :class="$style.noteFooterButton" @mousedown="clip()">
 				<i class="ph-paperclip ph-bold ph-lg"></i>
@@ -345,10 +360,12 @@ if ($i) {
 	});
 }
 
+let renoting = false;
+
 const keymap = {
 	'r': () => reply(true),
 	'e|a|plus': () => react(true),
-	'q': () => renote(appearNote.value.visibility),
+	'(q)': () => { if (canRenote.value && !renoted.value && !renoting) renote(defaultStore.state.visibilityOnBoost); },
 	'esc': blur,
 	'm|o': () => showMenu(true),
 	's': () => showContent.value !== showContent.value,
@@ -440,6 +457,8 @@ useTooltip(quoteButton, async (showing) => {
 });
 
 function boostVisibility() {
+	if (renoting) return;
+
 	if (!defaultStore.state.showVisibilitySelectorOnBoost) {
 		renote(defaultStore.state.visibilityOnBoost);
 	} else {
@@ -450,6 +469,8 @@ function boostVisibility() {
 function renote(visibility: Visibility, localOnly: boolean = false) {
 	pleaseLogin();
 	showMovedDialog();
+
+	renoting = true;
 
 	if (appearNote.value.channel) {
 		const el = renoteButton.value as HTMLElement | null | undefined;
@@ -466,7 +487,7 @@ function renote(visibility: Visibility, localOnly: boolean = false) {
 		}).then(() => {
 			os.toast(i18n.ts.renoted);
 			renoted.value = true;
-		});
+		}).finally(() => { renoting = false; });
 	} else if (!appearNote.value.channel || appearNote.value.channel.allowRenoteToExternal) {
 		const el = renoteButton.value as HTMLElement | null | undefined;
 		if (el) {
@@ -483,7 +504,7 @@ function renote(visibility: Visibility, localOnly: boolean = false) {
 		}).then(() => {
 			os.toast(i18n.ts.renoted);
 			renoted.value = true;
-		});
+		}).finally(() => { renoting = false; });
 	}
 }
 

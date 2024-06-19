@@ -9,6 +9,10 @@ import MkAd from './MkAd.vue';
 
 let lock: Promise<undefined> | undefined;
 
+function sleep(ms: number) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const common = {
 	render(args) {
 		return {
@@ -42,6 +46,8 @@ const common = {
 		lock = new Promise(r => resolve = r);
 
 		try {
+			// NOTE: sleep しないと何故か落ちる
+			await sleep(100);
 			const canvas = within(canvasElement);
 			const a = canvas.getByRole<HTMLAnchorElement>('link');
 			await expect(a.href).toMatch(/^https?:\/\/.*#test$/);
@@ -52,7 +58,11 @@ const common = {
 			const i = buttons[0];
 			await expect(i).toBeInTheDocument();
 			await userEvent.click(i);
+<<<<<<< HEAD
 			await waitFor(() => expect(canvasElement).toHaveTextContent(i18n.ts._ad.back));
+=======
+			await expect(canvasElement).toHaveTextContent(i18n.ts._ad.back);
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 			await expect(a).not.toBeInTheDocument();
 			await expect(i).not.toBeInTheDocument();
 			buttons = canvas.getAllByRole<HTMLButtonElement>('button');

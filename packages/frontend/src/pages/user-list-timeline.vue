@@ -32,6 +32,13 @@ import { misskeyApi } from '@/scripts/misskey-api.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { i18n } from '@/i18n.js';
 import { useRouter } from '@/router/supplier.js';
+<<<<<<< HEAD
+=======
+import { defaultStore } from '@/store.js';
+import { deepMerge } from '@/scripts/merge.js';
+import * as os from '@/os.js';
+import { $i } from '@/account.js';
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 
 const router = useRouter();
 

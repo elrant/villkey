@@ -65,7 +65,6 @@ export const paramDef = {
 		localOnly: { type: 'boolean' },
 		withReplies: { type: 'boolean' },
 		withFile: { type: 'boolean' },
-		notify: { type: 'boolean' },
 	},
 	required: ['antennaId', 'name', 'src', 'keywords', 'excludeKeywords', 'users', 'caseSensitive', 'withReplies', 'withFile', 'notify'],
 } as const;
@@ -120,7 +119,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				localOnly: ps.localOnly,
 				withReplies: ps.withReplies,
 				withFile: ps.withFile,
-				notify: ps.notify,
 				isActive: true,
 				lastUsedAt: new Date(),
 			});

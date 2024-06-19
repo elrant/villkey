@@ -567,7 +567,7 @@ export type paths = {
      * admin/show-users
      * @description No description provided.
      *
-     * **Credential required**: *Yes* / **Permission**: *read:admin:show-users*
+     * **Credential required**: *Yes* / **Permission**: *read:admin:show-user*
      */
     post: operations['admin/show-users'];
   };
@@ -750,6 +750,15 @@ export type paths = {
      * **Credential required**: *No*
      */
     post: operations['announcements'];
+  };
+  '/announcements/show': {
+    /**
+     * announcements/show
+     * @description No description provided.
+     *
+     * **Credential required**: *No*
+     */
+    post: operations['announcements___show'];
   };
   '/antennas/create': {
     /**
@@ -4574,13 +4583,14 @@ export type components = {
       caseSensitive: boolean;
       /** @default false */
       localOnly: boolean;
-      notify: boolean;
       /** @default false */
       withReplies: boolean;
       withFile: boolean;
       isActive: boolean;
       /** @default false */
       hasUnreadNote: boolean;
+      /** @default false */
+      notify: boolean;
     };
     Clip: {
       /**
@@ -4614,6 +4624,8 @@ export type components = {
       followersCount: number;
       isNotResponding: boolean;
       isSuspended: boolean;
+      /** @enum {string} */
+      suspensionState: 'none' | 'manuallySuspended' | 'goneSuspended' | 'autoSuspendedForNotResponding';
       isBlocked: boolean;
       /** @example misskey */
       softwareName: string | null;
@@ -4960,6 +4972,7 @@ export type components = {
       impressumUrl: string | null;
       logoImageUrl: string | null;
       privacyPolicyUrl: string | null;
+      inquiryUrl: string | null;
       serverRules: string[];
       themeColor: string | null;
       policies: components['schemas']['RolePolicies'];
@@ -5114,6 +5127,7 @@ export type operations = {
             shortName: string | null;
             objectStorageS3ForcePathStyle: boolean;
             privacyPolicyUrl: string | null;
+            inquiryUrl: string | null;
             repositoryUrl: string | null;
             summalyProxy: string | null;
             themeColor: string | null;
@@ -6993,6 +7007,8 @@ export type operations = {
           query?: string | null;
           /** @default 10 */
           limit?: number;
+          /** @default null */
+          offset?: number | null;
           /** Format: misskey:id */
           sinceId?: string;
           /** Format: misskey:id */
@@ -8782,7 +8798,7 @@ export type operations = {
    * admin/show-users
    * @description No description provided.
    *
-   * **Credential required**: *Yes* / **Permission**: *read:admin:show-users*
+   * **Credential required**: *Yes* / **Permission**: *read:admin:show-user*
    */
   'admin/show-users': {
     requestBody: {
@@ -9300,6 +9316,7 @@ export type operations = {
           impressumUrl?: string | null;
           donationUrl?: string | null;
           privacyPolicyUrl?: string | null;
+          inquiryUrl?: string | null;
           useObjectStorage?: boolean;
           objectStorageBaseUrl?: string | null;
           objectStorageBucket?: string | null;
@@ -10059,6 +10076,60 @@ export type operations = {
     };
   };
   /**
+   * announcements/show
+   * @description No description provided.
+   *
+   * **Credential required**: *No*
+   */
+  announcements___show: {
+    requestBody: {
+      content: {
+        'application/json': {
+          /** Format: misskey:id */
+          announcementId: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK (with results) */
+      200: {
+        content: {
+          'application/json': components['schemas']['Announcement'];
+        };
+      };
+      /** @description Client error */
+      400: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Authentication error */
+      401: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Forbidden error */
+      403: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description I'm Ai */
+      418: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+    };
+  };
+  /**
    * antennas/create
    * @description No description provided.
    *
@@ -10080,7 +10151,6 @@ export type operations = {
           localOnly?: boolean;
           withReplies: boolean;
           withFile: boolean;
-          notify: boolean;
         };
       };
     };
@@ -10359,9 +10429,9 @@ export type operations = {
           users: string[];
           caseSensitive: boolean;
           localOnly?: boolean;
-          withReplies: boolean;
-          withFile: boolean;
-          notify: boolean;
+          excludeBots?: boolean;
+          withReplies?: boolean;
+          withFile?: boolean;
         };
       };
     };
@@ -21660,6 +21730,8 @@ export type operations = {
           limit?: number;
           /** @default 0 */
           offset?: number;
+          /** @default false */
+          excludeChannels?: boolean;
         };
       };
     };

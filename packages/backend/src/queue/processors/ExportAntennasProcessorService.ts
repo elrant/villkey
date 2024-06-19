@@ -83,7 +83,6 @@ export class ExportAntennasProcessorService {
 					localOnly: antenna.localOnly,
 					withReplies: antenna.withReplies,
 					withFile: antenna.withFile,
-					notify: antenna.notify,
 				}));
 				if (antennas.length - 1 !== index) {
 					write(', ');

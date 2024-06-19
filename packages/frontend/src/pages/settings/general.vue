@@ -50,19 +50,45 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 		<div class="_gaps_m">
 			<div class="_gaps_s">
-				<MkSwitch v-model="showNoteActionsOnlyHover">{{ i18n.ts.showNoteActionsOnlyHover }}</MkSwitch>
-				<MkSwitch v-model="showClipButtonInNoteFooter">{{ i18n.ts.showClipButtonInNoteFooter }}</MkSwitch>
-				<MkSwitch v-model="collapseRenotes">{{ i18n.ts.collapseRenotes }}</MkSwitch>
+				<MkSwitch v-model="collapseRenotes">
+					<template #label>{{ i18n.ts.collapseRenotes }}</template>
+					<template #caption>{{ i18n.ts.collapseRenotesDescription }}</template>
+				</MkSwitch>
+				<MkSwitch v-model="collapseNotesRepliedTo">{{ i18n.ts.collapseNotesRepliedTo }}</MkSwitch>
 				<MkSwitch v-model="collapseFiles">{{ i18n.ts.collapseFiles }}</MkSwitch>
 				<MkSwitch v-model="uncollapseCW">Uncollapse CWs on notes</MkSwitch>
-				<MkSwitch v-model="autoloadConversation">{{ i18n.ts.autoloadConversation }}</MkSwitch>
 				<MkSwitch v-model="expandLongNote">Always expand long notes</MkSwitch>
+				<MkSwitch v-model="showNoteActionsOnlyHover">{{ i18n.ts.showNoteActionsOnlyHover }}</MkSwitch>
+				<MkSwitch v-model="showClipButtonInNoteFooter">{{ i18n.ts.showClipButtonInNoteFooter }}</MkSwitch>
+				<MkSwitch v-model="autoloadConversation">{{ i18n.ts.autoloadConversation }}</MkSwitch>
 				<MkSwitch v-model="advancedMfm">{{ i18n.ts.enableAdvancedMfm }}</MkSwitch>
 				<MkSwitch v-if="advancedMfm" v-model="animatedMfm">{{ i18n.ts.enableAnimatedMfm }}</MkSwitch>
 				<MkSwitch v-if="advancedMfm" v-model="enableQuickAddMfmFunction">{{ i18n.ts.enableQuickAddMfmFunction }}</MkSwitch>
 				<MkSwitch v-model="showGapBetweenNotesInTimeline">{{ i18n.ts.showGapBetweenNotesInTimeline }}</MkSwitch>
 				<MkSwitch v-model="loadRawImages">{{ i18n.ts.loadRawImages }}</MkSwitch>
 				<MkSwitch v-model="showTickerOnReplies">Show instance ticker on replies</MkSwitch>
+				<MkSelect v-model="searchEngine" placeholder="Other">
+					<template #label>{{ i18n.ts.searchEngine }}</template>
+					<option
+						v-for="[key, value] in Object.entries(searchEngineMap)" :key="key" :value="key"
+					>
+						{{ value }}
+					</option>
+					<!-- If the user is on Other and enters a domain add this one so that the dropdown doesnt go blank -->
+					<option v-if="useCustomSearchEngine" :value="searchEngine">
+						{{ i18n.ts.searchEngineOther }}
+					</option>
+					<!-- If one of the other options is selected show this as a blank other -->
+					<option v-if="!useCustomSearchEngine" value="">{{ i18n.ts.searchEngineOther }}</option>
+				</MkSelect>
+
+				<div v-if="useCustomSearchEngine">
+					<MkInput v-model="searchEngine" :max="300">
+						<template #label>{{ i18n.ts.searchEngineCusomURI }}</template>
+						<template #caption>{{ i18n.ts.searchEngineCustomURIDescription }}</template>
+					</MkInput>
+				</div>
+
 				<MkRadios v-model="reactionsDisplaySize">
 					<template #label>{{ i18n.ts.reactionsDisplaySize }}</template>
 					<option value="small">{{ i18n.ts.small }}</option>
@@ -111,6 +137,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 		<div class="_gaps_m">
 			<MkSwitch v-model="useGroupedNotifications">{{ i18n.ts.useGroupedNotifications }}</MkSwitch>
+
+			<MkSwitch v-model="enableFaviconNotificationDot">{{ i18n.ts.enableFaviconNotificationDot }}</MkSwitch>
 
 			<MkRadios v-model="notificationPosition">
 				<template #label>{{ i18n.ts.position }}</template>
@@ -271,11 +299,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkSelect from '@/components/MkSelect.vue';
 import MkRadios from '@/components/MkRadios.vue';
+import MkInput from '@/components/MkInput.vue';
 import MkRange from '@/components/MkRange.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import MkButton from '@/components/MkButton.vue';
@@ -284,6 +313,7 @@ import FormLink from '@/components/form/link.vue';
 import MkLink from '@/components/MkLink.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import { langs } from '@/config.js';
+import { searchEngineMap } from '@/scripts/search-engine-map.js';
 import { defaultStore } from '@/store.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
@@ -318,6 +348,7 @@ const showClipButtonInNoteFooter = computed(defaultStore.makeGetterSetter('showC
 const reactionsDisplaySize = computed(defaultStore.makeGetterSetter('reactionsDisplaySize'));
 const limitWidthOfReaction = computed(defaultStore.makeGetterSetter('limitWidthOfReaction'));
 const collapseRenotes = computed(defaultStore.makeGetterSetter('collapseRenotes'));
+const collapseNotesRepliedTo = computed(defaultStore.makeGetterSetter('collapseNotesRepliedTo'));
 const clickToOpen = computed(defaultStore.makeGetterSetter('clickToOpen'));
 const showBots = computed(defaultStore.makeGetterSetter('tlWithBots'));
 const collapseFiles = computed(defaultStore.makeGetterSetter('collapseFiles'));
@@ -337,6 +368,7 @@ const oneko = computed(defaultStore.makeGetterSetter('oneko'));
 const loadRawImages = computed(defaultStore.makeGetterSetter('loadRawImages'));
 const highlightSensitiveMedia = computed(defaultStore.makeGetterSetter('highlightSensitiveMedia'));
 const imageNewTab = computed(defaultStore.makeGetterSetter('imageNewTab'));
+const enableFaviconNotificationDot = computed(defaultStore.makeGetterSetter('enableFaviconNotificationDot'));
 const warnMissingAltText = computed(defaultStore.makeGetterSetter('warnMissingAltText'));
 const nsfw = computed(defaultStore.makeGetterSetter('nsfw'));
 const showFixedPostForm = computed(defaultStore.makeGetterSetter('showFixedPostForm'));
@@ -355,6 +387,9 @@ const keepScreenOn = computed(defaultStore.makeGetterSetter('keepScreenOn'));
 const disableStreamingTimeline = computed(defaultStore.makeGetterSetter('disableStreamingTimeline'));
 const useGroupedNotifications = computed(defaultStore.makeGetterSetter('useGroupedNotifications'));
 const showTickerOnReplies = computed(defaultStore.makeGetterSetter('showTickerOnReplies'));
+//const searchEngine = computed(defaultStore.makeGetterSetter('searchEngine'));
+const searchEngine = computed(defaultStore.makeGetterSetter('searchEngine'));
+
 const noteDesign = computed(defaultStore.makeGetterSetter('noteDesign'));
 const uncollapseCW = computed(defaultStore.makeGetterSetter('uncollapseCW'));
 const expandLongNote = computed(defaultStore.makeGetterSetter('expandLongNote'));
@@ -542,4 +577,6 @@ definePageMetadata(() => ({
 	title: i18n.ts.general,
 	icon: 'ph-faders ph-bold ph-lg',
 }));
+
+const useCustomSearchEngine = computed(() => !Object.keys(searchEngineMap).includes(searchEngine.value));
 </script>

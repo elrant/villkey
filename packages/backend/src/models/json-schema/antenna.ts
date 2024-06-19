@@ -72,9 +72,16 @@ export const packedAntennaSchema = {
 			optional: false, nullable: false,
 			default: false,
 		},
+<<<<<<< HEAD
 		notify: {
 			type: 'boolean',
 			optional: false, nullable: false,
+=======
+		excludeBots: {
+			type: 'boolean',
+			optional: false, nullable: false,
+			default: false,
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 		},
 		withReplies: {
 			type: 'boolean',
@@ -90,6 +97,11 @@ export const packedAntennaSchema = {
 			optional: false, nullable: false,
 		},
 		hasUnreadNote: {
+			type: 'boolean',
+			optional: false, nullable: false,
+			default: false,
+		},
+		notify: {
 			type: 'boolean',
 			optional: false, nullable: false,
 			default: false,

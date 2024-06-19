@@ -38,11 +38,16 @@ export class AntennaEntityService {
 			users: antenna.users,
 			caseSensitive: antenna.caseSensitive,
 			localOnly: antenna.localOnly,
+<<<<<<< HEAD
 			notify: antenna.notify,
+=======
+			excludeBots: antenna.excludeBots,
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 			withReplies: antenna.withReplies,
 			withFile: antenna.withFile,
 			isActive: antenna.isActive,
 			hasUnreadNote: false, // TODO
+			notify: false, // 後方互換性のため
 		};
 	}
 }

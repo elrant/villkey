@@ -68,7 +68,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<input v-show="useCw" ref="cwInputEl" v-model="cw" :class="$style.cw" :placeholder="i18n.ts.annotation" @keydown="onKeydown">
 	<div :class="[$style.textOuter, { [$style.withCw]: useCw }]">
 		<div v-if="channel" :class="$style.colorBar" :style="{ background: channel.color }"></div>
-		<textarea ref="textareaEl" v-model="text" :class="[$style.text]" :disabled="posting || posted" :readonly="textAreaReadOnly" :placeholder="placeholder" data-cy-post-form-text @keydown="onKeydown" @paste="onPaste" @compositionupdate="onCompositionUpdate" @compositionend="onCompositionEnd"/>
+		<textarea ref="textareaEl" v-model="text" :class="[$style.text]" :disabled="posting || posted" :readonly="textAreaReadOnly" :placeholder="placeholder" data-cy-post-form-text dir="auto" @keydown="onKeydown" @paste="onPaste" @compositionupdate="onCompositionUpdate" @compositionend="onCompositionEnd"/>
 		<div v-if="maxTextLength - textLength < 100" :class="['_acrylic', $style.textCount, { [$style.textOver]: textLength > maxTextLength }]">{{ maxTextLength - textLength }}</div>
 	</div>
 	<input v-show="withHashtags" ref="hashtagsInputEl" v-model="hashtags" :class="$style.hashtags" :placeholder="i18n.ts.hashtags" list="hashtags">
@@ -191,7 +191,7 @@ const localOnly = ref<boolean>(props.initialLocalOnly ?? defaultStore.state.reme
 const visibility = ref(props.initialVisibility ?? (defaultStore.state.rememberNoteVisibility ? defaultStore.state.visibility : defaultStore.state.defaultNoteVisibility) as typeof Misskey.noteVisibilities[number]);
 const visibleUsers = ref<Misskey.entities.UserDetailed[]>([]);
 if (props.initialVisibleUsers) {
-	props.initialVisibleUsers.forEach(pushVisibleUser);
+	props.initialVisibleUsers.forEach(u => pushVisibleUser(u));
 }
 const reactionAcceptance = ref(defaultStore.state.reactionAcceptance);
 const autocomplete = ref(null);
@@ -331,7 +331,7 @@ if (props.reply && ['home', 'followers', 'specified'].includes(props.reply.visib
 			misskeyApi('users/show', {
 				userIds: props.reply.visibleUserIds.filter(uid => uid !== $i.id && uid !== props.reply?.userId),
 			}).then(users => {
-				users.forEach(pushVisibleUser);
+				users.forEach(u => pushVisibleUser(u));
 			});
 		}
 
@@ -606,6 +606,23 @@ async function onPaste(ev: ClipboardEvent) {
 			}
 
 			quoteId.value = paste.substring(url.length).match(/^\/notes\/(.+?)\/?$/)?.[1] ?? null;
+		});
+	}
+
+	if (paste.length > 1000) {
+		ev.preventDefault();
+		os.confirm({
+			type: 'info',
+			text: i18n.ts.attachAsFileQuestion,
+		}).then(({ canceled }) => {
+			if (canceled) {
+				insertTextAtCursor(textareaEl.value, paste);
+				return;
+			}
+
+			const fileName = formatTimeString(new Date(), defaultStore.state.pastedFileName).replace(/{{number}}/g, "0");
+			const file = new File([paste], `${fileName}.txt`, { type: "text/plain" });
+			upload(file, `${fileName}.txt`);
 		});
 	}
 }
@@ -991,6 +1008,14 @@ onMounted(() => {
 				if (draft.data.poll) {
 					poll.value = draft.data.poll;
 				}
+<<<<<<< HEAD
+=======
+				if (draft.data.visibleUserIds) {
+					misskeyApi('users/show', { userIds: draft.data.visibleUserIds }).then(users => {
+						users.forEach(u => pushVisibleUser(u));
+					});
+				}
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 			}
 		}
 

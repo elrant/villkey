@@ -42,7 +42,6 @@ describe('アンテナ', () => {
 		excludeKeywords: [['']],
 		keywords: [['keyword']],
 		name: 'test',
-		notify: false,
 		src: 'all' as const,
 		userListId: null,
 		users: [''],
@@ -154,14 +153,18 @@ describe('アンテナ', () => {
 			isActive: true,
 			keywords: [['keyword']],
 			name: 'test',
-			notify: false,
 			src: 'all',
 			userListId: null,
 			users: [''],
 			withFile: false,
 			withReplies: false,
 			localOnly: false,
+<<<<<<< HEAD
 		} as Antenna;
+=======
+			notify: false,
+		};
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 		assert.deepStrictEqual(response, expected);
 	});
 
@@ -202,6 +205,7 @@ describe('アンテナ', () => {
 	});
 
 	const antennaParamPattern = [
+<<<<<<< HEAD
 		{ parameters: (): object => ({ name: 'x'.repeat(100) }) },
 		{ parameters: (): object => ({ name: 'x' }) },
 		{ parameters: (): object => ({ src: 'home' }) },
@@ -223,6 +227,27 @@ describe('アンテナ', () => {
 		{ parameters: (): object => ({ withFile: true }) },
 		{ parameters: (): object => ({ notify: false }) },
 		{ parameters: (): object => ({ notify: true }) },
+=======
+		{ parameters: () => ({ name: 'x'.repeat(100) }) },
+		{ parameters: () => ({ name: 'x' }) },
+		{ parameters: () => ({ src: 'home' as const }) },
+		{ parameters: () => ({ src: 'all' as const }) },
+		{ parameters: () => ({ src: 'users' as const }) },
+		{ parameters: () => ({ src: 'list' as const }) },
+		{ parameters: () => ({ userListId: null }) },
+		{ parameters: () => ({ src: 'list' as const, userListId: aliceList.id }) },
+		{ parameters: () => ({ keywords: [['x']] }) },
+		{ parameters: () => ({ keywords: [['a', 'b', 'c'], ['x'], ['y'], ['z']] }) },
+		{ parameters: () => ({ excludeKeywords: [['a', 'b', 'c'], ['x'], ['y'], ['z']] }) },
+		{ parameters: () => ({ users: [alice.username] }) },
+		{ parameters: () => ({ users: [alice.username, bob.username, carol.username] }) },
+		{ parameters: () => ({ caseSensitive: false }) },
+		{ parameters: () => ({ caseSensitive: true }) },
+		{ parameters: () => ({ withReplies: false }) },
+		{ parameters: () => ({ withReplies: true }) },
+		{ parameters: () => ({ withFile: false }) },
+		{ parameters: () => ({ withFile: true }) },
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 	];
 	test.each(antennaParamPattern)('を作成できること($#)', async ({ parameters }) => {
 		const response = await successfulApiCall({

@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"engines": {
-		"node": ">=20.10.0"
+		"node": "^20.10.0"
 	},
 	"scripts": {
 		"start": "node ./built/boot/entry.js",
@@ -83,7 +83,13 @@
 		"@nestjs/core": "10.3.3",
 		"@nestjs/testing": "10.3.3",
 		"@peertube/http-signature": "1.7.0",
+<<<<<<< HEAD
 		"@simplewebauthn/server": "9.0.3",
+=======
+		"@sentry/node": "^8.5.0",
+		"@sentry/profiling-node": "^8.5.0",
+		"@simplewebauthn/server": "10.0.0",
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 		"@sinonjs/fake-timers": "11.2.2",
 		"@smithy/node-http-handler": "2.1.10",
 		"@swc/cli": "0.1.63",
@@ -117,7 +123,11 @@
 		"fluent-ffmpeg": "2.1.2",
 		"form-data": "4.0.0",
 		"glob": "10.3.10",
+<<<<<<< HEAD
 		"got": "14.2.0",
+=======
+		"got": "14.2.1",
+>>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 		"happy-dom": "10.0.3",
 		"hpagent": "1.2.0",
 		"htmlescape": "1.1.1",

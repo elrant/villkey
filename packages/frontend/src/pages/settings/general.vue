@@ -64,6 +64,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkSwitch v-model="advancedMfm">{{ i18n.ts.enableAdvancedMfm }}</MkSwitch>
 				<MkSwitch v-if="advancedMfm" v-model="animatedMfm">{{ i18n.ts.enableAnimatedMfm }}</MkSwitch>
 				<MkSwitch v-if="advancedMfm" v-model="enableQuickAddMfmFunction">{{ i18n.ts.enableQuickAddMfmFunction }}</MkSwitch>
+				<MkSwitch v-model="showReactionsCount">{{ i18n.ts.showReactionsCount }}</MkSwitch>
 				<MkSwitch v-model="showGapBetweenNotesInTimeline">{{ i18n.ts.showGapBetweenNotesInTimeline }}</MkSwitch>
 				<MkSwitch v-model="loadRawImages">{{ i18n.ts.loadRawImages }}</MkSwitch>
 				<MkSwitch v-model="showTickerOnReplies">Show instance ticker on replies</MkSwitch>
@@ -189,6 +190,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkSwitch v-model="forceShowAds">{{ i18n.ts.forceShowAds }}</MkSwitch>
 				<MkSwitch v-model="oneko">{{ i18n.ts.oneko }}</MkSwitch>
 				<MkSwitch v-model="enableSeasonalScreenEffect">{{ i18n.ts.seasonalScreenEffect }}</MkSwitch>
+				<MkSwitch v-model="useNativeUIForVideoAudioPlayer">{{ i18n.ts.useNativeUIForVideoAudioPlayer }}</MkSwitch>
 			</div>
 			<div>
 				<MkRadios v-model="emojiStyle">
@@ -231,6 +233,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkSwitch v-model="showBots">{{ i18n.ts.showBots }}</MkSwitch>
 				<MkSwitch v-model="disableStreamingTimeline">{{ i18n.ts.disableStreamingTimeline }}</MkSwitch>
 				<MkSwitch v-model="enableHorizontalSwipe">{{ i18n.ts.enableHorizontalSwipe }}</MkSwitch>
+				<MkSwitch v-model="alwaysConfirmFollow">{{ i18n.ts.alwaysConfirmFollow }}</MkSwitch>
 			</div>
 			<MkSelect v-model="serverDisconnectedBehavior">
 				<template #label>{{ i18n.ts.whenServerDisconnected }}</template>
@@ -366,7 +369,14 @@ const limitWidthOfReaction = computed(defaultStore.makeGetterSetter('limitWidthO
 const collapseRenotes = computed(defaultStore.makeGetterSetter('collapseRenotes'));
 const collapseNotesRepliedTo = computed(defaultStore.makeGetterSetter('collapseNotesRepliedTo'));
 const clickToOpen = computed(defaultStore.makeGetterSetter('clickToOpen'));
-const showBots = computed(defaultStore.makeGetterSetter('tlWithBots'));
+// copied from src/pages/timeline.vue
+const showBots = computed<boolean>({
+	get: () => defaultStore.reactiveState.tl.value.filter.withBots,
+	set: (newValue) => {
+		const out = deepMerge({ filter: { withBots: newValue } }, defaultStore.state.tl);
+		defaultStore.set('tl', out);
+	},
+});
 const collapseFiles = computed(defaultStore.makeGetterSetter('collapseFiles'));
 const autoloadConversation = computed(defaultStore.makeGetterSetter('autoloadConversation'));
 const reduceAnimation = computed(defaultStore.makeGetterSetter('animation', v => !v, v => !v));
@@ -375,6 +385,7 @@ const useBlurEffect = computed(defaultStore.makeGetterSetter('useBlurEffect'));
 const showGapBetweenNotesInTimeline = computed(defaultStore.makeGetterSetter('showGapBetweenNotesInTimeline'));
 const animatedMfm = computed(defaultStore.makeGetterSetter('animatedMfm'));
 const advancedMfm = computed(defaultStore.makeGetterSetter('advancedMfm'));
+const showReactionsCount = computed(defaultStore.makeGetterSetter('showReactionsCount'));
 const enableQuickAddMfmFunction = computed(defaultStore.makeGetterSetter('enableQuickAddMfmFunction'));
 const emojiStyle = computed(defaultStore.makeGetterSetter('emojiStyle'));
 const disableDrawer = computed(defaultStore.makeGetterSetter('disableDrawer'));
@@ -413,6 +424,8 @@ const enableSeasonalScreenEffect = computed(defaultStore.makeGetterSetter('enabl
 const showVisibilitySelectorOnBoost = computed(defaultStore.makeGetterSetter('showVisibilitySelectorOnBoost'));
 const visibilityOnBoost = computed(defaultStore.makeGetterSetter('visibilityOnBoost'));
 const enableHorizontalSwipe = computed(defaultStore.makeGetterSetter('enableHorizontalSwipe'));
+const useNativeUIForVideoAudioPlayer = computed(defaultStore.makeGetterSetter('useNativeUIForVideoAudioPlayer'));
+const alwaysConfirmFollow = computed(defaultStore.makeGetterSetter('alwaysConfirmFollow'));
 
 watch(lang, () => {
 	miLocalStorage.setItem('lang', lang.value as string);
@@ -471,6 +484,7 @@ watch([
 	enableSeasonalScreenEffect,
 	showVisibilitySelectorOnBoost,
 	visibilityOnBoost,
+	alwaysConfirmFollow,
 ], async () => {
 	await reloadAsk();
 });

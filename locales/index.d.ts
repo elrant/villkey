@@ -1677,6 +1677,10 @@ export interface Locale extends ILocale {
      */
     "antennaExcludeKeywords": string;
     /**
+     * Botアカウントを除外
+     */
+    "antennaExcludeBots": string;
+    /**
      * スペースで区切るとAND指定になり、改行で区切るとOR指定になります
      */
     "antennaKeywordsDescription": string;
@@ -2064,6 +2068,10 @@ export interface Locale extends ILocale {
      * ノートのアクションをホバー時のみ表示する
      */
     "showNoteActionsOnlyHover": string;
+    /**
+     * ノートのリアクション数を表示する
+     */
+    "showReactionsCount": string;
     /**
      * 履歴はありません
      */
@@ -6902,6 +6910,26 @@ export interface Locale extends ILocale {
              */
             "isRemote": string;
             /**
+             * 猫ユーザー
+             */
+            "isCat": string;
+            /**
+             * botユーザー
+             */
+            "isBot": string;
+            /**
+             * サスペンド済みユーザー
+             */
+            "isSuspended": string;
+            /**
+             * 鍵アカウントユーザー
+             */
+            "isLocked": string;
+            /**
+             * 「アカウントを見つけやすくする」が有効なユーザー
+             */
+            "isExplorable": string;
+            /**
              * アカウント作成から～以内
              */
             "createdLessThan": string;
@@ -7162,6 +7190,10 @@ export interface Locale extends ILocale {
          * ソースを表示
          */
         "viewSource": string;
+        /**
+         * ログを表示
+         */
+        "viewLog": string;
     };
     "_preferencesBackups": {
         /**
@@ -7895,13 +7927,9 @@ export interface Locale extends ILocale {
          */
         "step1": ParameterizedString<"a" | "b">;
         /**
-         * 次に、表示されているQRコードをアプリでスキャンします。
+         * 次に、表示されているQRコードをアプリでスキャンするか、ボタンをクリックして端末上でアプリを開きます。
          */
         "step2": string;
-        /**
-         * QRコードをクリックすると、お使いの端末にインストールされている認証アプリやキーリングに登録できます。
-         */
-        "step2Click": string;
         /**
          * デスクトップアプリを使用する場合は次のURIを入力します
          */
@@ -7994,6 +8022,10 @@ export interface Locale extends ILocale {
          * バックアップコードが全て使用されました。認証アプリを利用できない場合、これ以上アカウントにアクセスできなくなります。認証アプリを再登録してください。
          */
         "backupCodesExhaustedWarning": string;
+        /**
+         * 詳細なガイドはこちら
+         */
+        "moreDetailedGuideHere": string;
     };
     "_permissions": {
         /**
@@ -9028,6 +9060,10 @@ export interface Locale extends ILocale {
          * 説明
          */
         "summary": string;
+        /**
+         * 非公開に設定するとプロフィールに表示されなくなりますが、URLを知っている人は引き続きアクセスできます。
+         */
+        "visibilityDescription": string;
     };
     "_pages": {
         /**
@@ -9200,6 +9236,14 @@ export interface Locale extends ILocale {
              */
             "button": string;
             /**
+             * 動的ブロック
+             */
+            "dynamic": string;
+            /**
+             * このブロックは廃止されています。今後は{play}を利用してください。
+             */
+            "dynamicDescription": ParameterizedString<"play">;
+            /**
              * ノート埋め込み
              */
             "note": string;
@@ -9315,7 +9359,11 @@ export interface Locale extends ILocale {
          */
         "reactedBySomeUsers": ParameterizedString<"n">;
         /**
-         * {n}人がブーストしました
+         * {n}人がいいねしました
+         */
+        "likedBySomeUsers": ParameterizedString<"n">;
+        /**
+         * {n}人がリノートしました
          */
         "renotedBySomeUsers": ParameterizedString<"n">;
         /**
@@ -10198,6 +10246,74 @@ export interface Locale extends ILocale {
          * サーバーに接続できません
          */
         "header": string;
+    };
+    "_urlPreviewSetting": {
+        /**
+         * URLプレビューの設定
+         */
+        "title": string;
+        /**
+         * URLプレビューを有効にする
+         */
+        "enable": string;
+        /**
+         * プレビュー取得時のタイムアウト(ms)
+         */
+        "timeout": string;
+        /**
+         * プレビュー取得の所要時間がこの値を超えた場合、プレビューは生成されません。
+         */
+        "timeoutDescription": string;
+        /**
+         * Content-Lengthの最大値(byte)
+         */
+        "maximumContentLength": string;
+        /**
+         * Content-Lengthがこの値を超えた場合、プレビューは生成されません。
+         */
+        "maximumContentLengthDescription": string;
+        /**
+         * Content-Lengthが取得できた場合のみプレビューを生成
+         */
+        "requireContentLength": string;
+        /**
+         * 相手サーバがContent-Lengthを返さない場合、プレビューは生成されません。
+         */
+        "requireContentLengthDescription": string;
+        /**
+         * User-Agent
+         */
+        "userAgent": string;
+        /**
+         * プレビュー取得時に使用されるUser-Agentを設定します。空欄の場合、デフォルトのUser-Agentが使用されます。
+         */
+        "userAgentDescription": string;
+        /**
+         * プレビューを生成するプロキシのエンドポイント
+         */
+        "summaryProxy": string;
+        /**
+         * Misskey本体ではなく、サマリープロキシを使用してプレビューを生成します。
+         */
+        "summaryProxyDescription": string;
+        /**
+         * プロキシには下記パラメータがクエリ文字列として連携されます。プロキシ側がこれらをサポートしない場合、設定値は無視されます。
+         */
+        "summaryProxyDescription2": string;
+    };
+    "_mediaControls": {
+        /**
+         * ピクチャインピクチャ
+         */
+        "pip": string;
+        /**
+         * 再生速度
+         */
+        "playbackRate": string;
+        /**
+         * ループ再生
+         */
+        "loop": string;
     };
 }
 declare const locales: {

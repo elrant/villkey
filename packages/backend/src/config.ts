@@ -229,6 +229,8 @@ export function loadConfig(): Config {
 			{} as Source,
 		) as Source;
 
+	applyEnvOverrides(config);
+
 	const url = tryCreateUrl(config.url);
 	const version = meta.version;
 	const host = url.host;

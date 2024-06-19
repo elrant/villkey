@@ -26,6 +26,14 @@ export async function getNoteClipMenu(props: {
 	isDeleted: Ref<boolean>;
 	currentClip?: Misskey.entities.Clip;
 }) {
+	function getClipName(clip: Misskey.entities.Clip) {
+		if ($i && clip.userId === $i.id && clip.notesCount != null) {
+			return `${clip.name} (${clip.notesCount}/${$i.policies.noteEachClipsLimit})`;
+		} else {
+			return clip.name;
+		}
+	}
+
 	const isRenote = (
 		props.note.renote != null &&
 		props.note.text == null &&
@@ -37,7 +45,7 @@ export async function getNoteClipMenu(props: {
 
 	const clips = await clipsCache.fetch();
 	const menu: MenuItem[] = [...clips.map(clip => ({
-		text: clip.name,
+		text: getClipName(clip),
 		action: () => {
 			claimAchievement('noteClipped1');
 			os.promiseDialog(
@@ -50,7 +58,18 @@ export async function getNoteClipMenu(props: {
 							text: i18n.tsx.confirmToUnclipAlreadyClippedNote({ name: clip.name }),
 						});
 						if (!confirm.canceled) {
-							os.apiWithDialog('clips/remove-note', { clipId: clip.id, noteId: appearNote.id });
+							os.apiWithDialog('clips/remove-note', { clipId: clip.id, noteId: appearNote.id }).then(() => {
+								clipsCache.set(clips.map(c => {
+									if (c.id === clip.id) {
+										return {
+											...c,
+											notesCount: Math.max(0, ((c.notesCount ?? 0) - 1)),
+										};
+									} else {
+										return c;
+									}
+								}));
+							});
 							if (props.currentClip?.id === clip.id) props.isDeleted.value = true;
 						}
 					} else {
@@ -60,7 +79,18 @@ export async function getNoteClipMenu(props: {
 						});
 					}
 				},
-			);
+			).then(() => {
+				clipsCache.set(clips.map(c => {
+					if (c.id === clip.id) {
+						return {
+							...c,
+							notesCount: (c.notesCount ?? 0) + 1,
+						};
+					} else {
+						return c;
+					}
+				}));
+			});
 		},
 	})), { type: 'divider' }, {
 		icon: 'ph-plus ph-bold ph-lg',
@@ -347,7 +377,7 @@ export function getNoteMenu(props: {
 				action: () => toggleThreadMute(true),
 			}),
 			appearNote.userId === $i.id ? ($i.pinnedNoteIds ?? []).includes(appearNote.id) ? {
-				icon: 'ph-push-pin ph-bold ph-lgned-off',
+				icon: 'ph-push-pin-slash ph-bold ph-lg',
 				text: i18n.ts.unpin,
 				action: () => togglePin(false),
 			} : {
@@ -386,7 +416,7 @@ export function getNoteMenu(props: {
 				{ type: 'divider' },
 				{
 					type: 'parent' as const,
-					icon: 'ti ti-device-tv',
+					icon: 'ph-television ph-bold ph-lg',
 					text: i18n.ts.channel,
 					children: async () => {
 						const channelChildMenu = [] as MenuItem[];
@@ -395,7 +425,7 @@ export function getNoteMenu(props: {
 
 						if (channel.pinnedNoteIds.includes(appearNote.id)) {
 							channelChildMenu.push({
-								icon: 'ti ti-pinned-off',
+								icon: 'ph-push-pin-slash ph-bold ph-lg',
 								text: i18n.ts.unpin,
 								action: () => os.apiWithDialog('channels/update', {
 									channelId: appearNote.channel!.id,
@@ -404,7 +434,7 @@ export function getNoteMenu(props: {
 							});
 						} else {
 							channelChildMenu.push({
-								icon: 'ti ti-pin',
+								icon: 'ph-push-pin ph-bold ph-lg',
 								text: i18n.ts.pin,
 								action: () => os.apiWithDialog('channels/update', {
 									channelId: appearNote.channel!.id,
@@ -496,10 +526,9 @@ export function getNoteMenu(props: {
 	};
 }
 
-type Visibility = 'public' | 'home' | 'followers' | 'specified';
+type Visibility = (typeof Misskey.noteVisibilities)[number];
 
-// defaultStore.state.visibilityがstringなためstringも受け付けている
-function smallerVisibility(a: Visibility | string, b: Visibility | string): Visibility {
+function smallerVisibility(a: Visibility, b: Visibility): Visibility {
 	if (a === 'specified' || b === 'specified') return 'specified';
 	if (a === 'followers' || b === 'followers') return 'followers';
 	if (a === 'home' || b === 'home') return 'home';
@@ -528,7 +557,7 @@ export function getRenoteMenu(props: {
 	if (appearNote.channel) {
 		channelRenoteItems.push(...[{
 			text: i18n.ts.inChannelRenote,
-			icon: 'ti ti-repeat',
+			icon: 'ph ph-repeat',
 			action: () => {
 				const el = props.renoteButton.value;
 				if (el) {
@@ -549,7 +578,7 @@ export function getRenoteMenu(props: {
 			},
 		}, {
 			text: i18n.ts.inChannelQuote,
-			icon: 'ti ti-quote',
+			icon: 'ph ph-quotes',
 			action: () => {
 				if (!props.mock) {
 					os.post({
@@ -564,7 +593,7 @@ export function getRenoteMenu(props: {
 	if (!appearNote.channel || appearNote.channel.allowRenoteToExternal) {
 		normalRenoteItems.push(...[{
 			text: i18n.ts.renote,
-			icon: 'ti ti-repeat',
+			icon: 'ph ph-repeat',
 			action: () => {
 				const el = props.renoteButton.value;
 				if (el) {
@@ -595,7 +624,7 @@ export function getRenoteMenu(props: {
 			},
 		}, (props.mock) ? undefined : {
 			text: i18n.ts.quote,
-			icon: 'ti ti-quote',
+			icon: 'ph ph-quotes',
 			action: () => {
 				os.post({
 					renote: appearNote,

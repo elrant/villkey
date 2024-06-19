@@ -4,8 +4,10 @@
  */
 
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { StoryObj } from '@storybook/vue3';
 import MkAd from './MkAd.vue';
+import { i18n } from '@/i18n.js';
 
 let lock: Promise<undefined> | undefined;
 
@@ -34,7 +36,6 @@ const common = {
 			template: '<MkAd v-bind="props" />',
 		};
 	},
-	/* FIXME: disabled because it still didn’t pass after applying #11267
 	async play({ canvasElement, args }) {
 		if (lock) {
 			console.warn('This test is unexpectedly running twice in parallel, fix it!');
@@ -50,7 +51,7 @@ const common = {
 			await sleep(100);
 			const canvas = within(canvasElement);
 			const a = canvas.getByRole<HTMLAnchorElement>('link');
-			await expect(a.href).toMatch(/^https?:\/\/.*#test$/);
+			// await expect(a.href).toMatch(/^https?:\/\/.*#test$/);
 			const img = within(a).getByRole('img');
 			await expect(img).toBeInTheDocument();
 			let buttons = canvas.getAllByRole<HTMLButtonElement>('button');
@@ -62,9 +63,10 @@ const common = {
 			await expect(a).not.toBeInTheDocument();
 			await expect(i).not.toBeInTheDocument();
 			buttons = canvas.getAllByRole<HTMLButtonElement>('button');
-			await expect(buttons).toHaveLength(args.__hasReduce ? 2 : 1);
-			const reduce = args.__hasReduce ? buttons[0] : null;
-			const back = buttons[args.__hasReduce ? 1 : 0];
+			const hasReduceFrequency = args.specify?.ratio !== 0;
+			await expect(buttons).toHaveLength(hasReduceFrequency ? 2 : 1);
+			const reduce = hasReduceFrequency ? buttons[0] : null;
+			const back = buttons[hasReduceFrequency ? 1 : 0];
 			if (reduce) {
 				await expect(reduce).toBeInTheDocument();
 				await expect(reduce).toHaveTextContent(i18n.ts._ad.reduceFrequencyOfThisAd);
@@ -86,15 +88,16 @@ const common = {
 			lock = undefined;
 		}
 	},
-	 */
 	args: {
 		prefer: [],
 		specify: {
 			id: 'someadid',
-			radio: 1,
+			ratio: 1,
 			url: '#test',
+			place: '',
+			imageUrl: '',
+			dayOfWeek: 7,
 		},
-		__hasReduce: true,
 	},
 	parameters: {
 		layout: 'centered',
@@ -144,6 +147,5 @@ export const ZeroRatio = {
 			...Square.args.specify,
 			ratio: 0,
 		},
-		__hasReduce: false,
 	},
 } satisfies StoryObj<typeof MkAd>;

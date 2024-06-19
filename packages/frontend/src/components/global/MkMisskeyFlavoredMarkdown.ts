@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { VNode, h, defineAsyncComponent, SetupContext } from 'vue';
+import { VNode, h, defineAsyncComponent, SetupContext, provide } from 'vue';
 import * as mfm from '@transfem-org/sfm-js';
 import * as Misskey from 'misskey-js';
+import CkFollowMouse from '../CkFollowMouse.vue';
 import MkUrl from '@/components/global/MkUrl.vue';
 import MkTime from '@/components/global/MkTime.vue';
 import MkLink from '@/components/MkLink.vue';
@@ -16,7 +17,7 @@ import MkCode from '@/components/MkCode.vue';
 import MkCodeInline from '@/components/MkCodeInline.vue';
 import MkGoogle from '@/components/MkGoogle.vue';
 import MkSparkle from '@/components/MkSparkle.vue';
-import MkA from '@/components/global/MkA.vue';
+import MkA, { MkABehavior } from '@/components/global/MkA.vue';
 import { host } from '@/config.js';
 import { defaultStore } from '@/store.js';
 import { nyaize as doNyaize } from '@/scripts/nyaize.js';
@@ -54,6 +55,8 @@ type MfmEvents = {
 
 // eslint-disable-next-line import/no-default-export
 export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEvents>['emit'] }) {
+	provide('linkNavigationBehavior', props.linkNavigationBehavior);
+
 	const isNote = props.isNote ?? true;
 	const shouldNyaize = props.nyaize ? props.nyaize === 'respect' ? props.author?.isCat ? props.author.speakAsCat : false : false : false;
 
@@ -232,6 +235,8 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 						return h(MkSparkle, {}, genEl(token.children, scale));
 					}
 					case 'fade': {
+						if (!useAnim) {
+							style = '';
 							break;
 						}
 
@@ -248,11 +253,49 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 						const degrees = safeParseFloat(token.props.args.deg) ?? 90;
 						break;
 					}
+					case 'followmouse': {
+						// Make sure advanced MFM is on and that reduced motion is off
+						if (!useAnim) {
+							style = '';
+							break;
+						}
+
+						let x = (!!token.props.args.x);
+						let y = (!!token.props.args.y);
+
+						if (!x && !y) {
+							x = true;
+							y = true;
+						}
+
+						return h(CkFollowMouse, {
+							x: x,
+							y: y,
+							speed: validTime(token.props.args.speed) ?? '0.1s',
+							rotateByVelocity: !!token.props.args.rotateByVelocity,
+						}, genEl(token.children, scale));
+					}
 					case 'position': {
 						if (!defaultStore.state.advancedMfm) break;
 						const x = safeParseFloat(token.props.args.x) ?? 0;
 						const y = safeParseFloat(token.props.args.y) ?? 0;
 						style = `transform: translateX(${x}em) translateY(${y}em);`;
+						break;
+					}
+					case 'crop': {
+						const top = Number.parseFloat(
+							(token.props.args.top ?? '0').toString(),
+						);
+						const right = Number.parseFloat(
+							(token.props.args.right ?? '0').toString(),
+						);
+						const bottom = Number.parseFloat(
+							(token.props.args.bottom ?? '0').toString(),
+						);
+						const left = Number.parseFloat(
+							(token.props.args.left ?? '0').toString(),
+						);
+						style = `clip-path: inset(${top}% ${right}% ${bottom}% ${left}%);`;
 						break;
 					}
 					case 'scale': {

@@ -17,6 +17,7 @@ import { defineAsyncComponent } from 'vue';
 import * as mfm from '@transfem-org/sfm-js';
 import * as Misskey from 'misskey-js';
 import { extractUrlFromMfm } from '@/scripts/extract-url-from-mfm.js';
+import { isEnabledUrlPreview } from '@/instance.js';
 
 const MkUrlPreview = defineAsyncComponent(() => import('@/components/MkUrlPreview.vue'));
 
@@ -27,3 +28,9 @@ const props = defineProps<{
 
 const urls = props.block.text ? extractUrlFromMfm(mfm.parse(props.block.text)) : [];
 </script>
+
+<style lang="scss" module>
+.textRoot {
+	font-size: 1.1rem;
+}
+</style>

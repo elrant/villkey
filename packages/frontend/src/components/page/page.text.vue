@@ -4,17 +4,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<<<<<<< HEAD
-<div class="_gaps">
-	<Mfm :text="block.text ?? ''" :isNote="false"/>
-	<MkUrlPreview v-for="url in urls" :key="url" :url="url"/>
-=======
 <div class="_gaps" :class="$style.textRoot">
 	<Mfm :text="block.text ?? ''" :isBlock="true" :isNote="false"/>
 	<div v-if="isEnabledUrlPreview" class="_gaps_s">
 		<MkUrlPreview v-for="url in urls" :key="url" :url="url"/>
 	</div>
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 </div>
 </template>
 

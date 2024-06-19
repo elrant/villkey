@@ -1008,14 +1008,11 @@ onMounted(() => {
 				if (draft.data.poll) {
 					poll.value = draft.data.poll;
 				}
-<<<<<<< HEAD
-=======
 				if (draft.data.visibleUserIds) {
 					misskeyApi('users/show', { userIds: draft.data.visibleUserIds }).then(users => {
 						users.forEach(u => pushVisibleUser(u));
 					});
 				}
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 			}
 		}
 

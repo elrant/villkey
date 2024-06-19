@@ -58,11 +58,7 @@ const common = {
 			const i = buttons[0];
 			await expect(i).toBeInTheDocument();
 			await userEvent.click(i);
-<<<<<<< HEAD
-			await waitFor(() => expect(canvasElement).toHaveTextContent(i18n.ts._ad.back));
-=======
 			await expect(canvasElement).toHaveTextContent(i18n.ts._ad.back);
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 			await expect(a).not.toBeInTheDocument();
 			await expect(i).not.toBeInTheDocument();
 			buttons = canvas.getAllByRole<HTMLButtonElement>('button');

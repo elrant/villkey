@@ -44,11 +44,8 @@ type MfmProps = {
 	enableEmojiMenu?: boolean;
 	enableEmojiMenuReaction?: boolean;
 	isAnim?: boolean;
-<<<<<<< HEAD
-=======
 	linkNavigationBehavior?: MkABehavior;
 	isBlock?: boolean;
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 };
 
 type MfmEvents = {
@@ -234,11 +231,7 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 						}
 						return h(MkSparkle, {}, genEl(token.children, scale));
 					}
-<<<<<<< HEAD
-=======
 					case 'fade': {
-						if (!useAnim) {
-							style = '';
 							break;
 						}
 
@@ -251,10 +244,8 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 						style = `animation: mfm-fade ${speed} ${delay} linear ${loop}; animation-direction: ${direction};`;
 						break;
 					}
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 					case 'rotate': {
 						const degrees = safeParseFloat(token.props.args.deg) ?? 90;
-						style = `transform: rotate(${degrees}deg); transform-origin: center center;`;
 						break;
 					}
 					case 'position': {

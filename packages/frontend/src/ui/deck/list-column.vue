@@ -9,11 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<i class="ph-list ph-bold ph-lg"></i><span style="margin-left: 8px;">{{ column.name }}</span>
 	</template>
 
-<<<<<<< HEAD
-	<MkTimeline v-if="column.listId" ref="timeline" src="list" :list="column.listId" :withRenotes="withRenotes"/>
-=======
 	<MkTimeline v-if="column.listId" ref="timeline" :key="column.listId + column.withRenotes + column.onlyFiles" src="list" :list="column.listId" :withRenotes="withRenotes" :onlyFiles="onlyFiles" @note="onNote"/>
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 </XColumn>
 </template>
 
@@ -37,11 +33,8 @@ const props = defineProps<{
 
 const timeline = shallowRef<InstanceType<typeof MkTimeline>>();
 const withRenotes = ref(props.column.withRenotes ?? true);
-<<<<<<< HEAD
-=======
 const onlyFiles = ref(props.column.onlyFiles ?? false);
 const soundSetting = ref<SoundStore>(props.column.soundSetting ?? { type: null, volume: 1 });
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 
 if (props.column.listId == null) {
 	setList();
@@ -53,8 +46,6 @@ watch(withRenotes, v => {
 	});
 });
 
-<<<<<<< HEAD
-=======
 watch(onlyFiles, v => {
 	updateColumn(props.column.id, {
 		onlyFiles: v,
@@ -65,7 +56,6 @@ watch(soundSetting, v => {
 	updateColumn(props.column.id, { soundSetting: v });
 });
 
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 async function setList() {
 	const lists = await misskeyApi('users/lists/list');
 	const { canceled, result: list } = await os.select({
@@ -105,8 +95,6 @@ const menu: MenuItem[] = [
 		text: i18n.ts.showRenotes,
 		ref: withRenotes,
 	},
-<<<<<<< HEAD
-=======
 	{
 		type: 'switch',
 		text: i18n.ts.fileAttachedOnly,
@@ -117,6 +105,5 @@ const menu: MenuItem[] = [
 		text: i18n.ts._deck.newNoteNotificationSettings,
 		action: () => soundSettingsButton(soundSetting),
 	},
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 ];
 </script>

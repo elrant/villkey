@@ -74,11 +74,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</MkA>
 			<MkA v-else-if="notification.type === 'renote' || notification.type === 'renote:grouped'" :class="$style.text" :to="notePage(notification.note)" :title="getNoteSummary(notification.note.renote)">
 				<i class="ph-quotes ph-bold ph-lg" :class="$style.quote"></i>
-<<<<<<< HEAD
-				<Mfm :text="getNoteSummary(notification.note.renote)" :plain="true" :nowrap="true" :author="notification.note.renote.user"/>
-=======
 				<Mfm :text="getNoteSummary(notification.note.renote)" :isBlock="true" :plain="true" :nowrap="true" :author="notification.note.renote?.user"/>
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 				<i class="ph-quotes ph-bold ph-lg" :class="$style.quote"></i>
 			</MkA>
 			<MkA v-else-if="notification.type === 'reply'" :class="$style.text" :to="notePage(notification.note)" :title="getNoteSummary(notification.note)">

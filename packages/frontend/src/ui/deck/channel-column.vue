@@ -13,25 +13,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div style="padding: 8px; text-align: center;">
 			<MkButton primary gradate rounded inline small @click="post"><i class="ph-pencil-simple ph-bold ph-lg"></i></MkButton>
 		</div>
-<<<<<<< HEAD
-		<MkTimeline ref="timeline" src="channel" :channel="column.channelId"/>
-=======
 		<MkTimeline ref="timeline" :key="column.channelId + column.withRenotes + column.onlyFiles" src="channel" :channel="column.channelId" :withRenotes="withRenotes" :onlyFiles="onlyFiles" @note="onNote"/>
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 	</template>
 </XColumn>
 </template>
 
 <script lang="ts" setup>
-<<<<<<< HEAD
 import { shallowRef } from 'vue';
-=======
 import { ref, shallowRef, watch } from 'vue';
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
-import * as Misskey from 'misskey-js';
-import XColumn from './column.vue';
 import { updateColumn, Column } from './deck-store.js';
-import MkTimeline from '@/components/MkTimeline.vue';
 import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os.js';
 import { favoritedChannelsCache } from '@/cache.js';
@@ -96,8 +86,6 @@ const menu: MenuItem[] = [{
 	icon: 'ph-pencil-simple ph-bold ph-lg',
 	text: i18n.ts.selectChannel,
 	action: setChannel,
-<<<<<<< HEAD
-=======
 }, {
 	type: 'switch',
 	text: i18n.ts.showRenotes,
@@ -110,6 +98,5 @@ const menu: MenuItem[] = [{
 	icon: 'ph-bell-ringing ph-bold ph-lg',
 	text: i18n.ts._deck.newNoteNotificationSettings,
 	action: () => soundSettingsButton(soundSetting),
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))
 }];
 </script>

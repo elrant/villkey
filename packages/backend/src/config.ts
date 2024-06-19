@@ -324,8 +324,6 @@ function convertRedisOptions(options: RedisOptionsSource, host: string): RedisOp
 		db: options.db ?? 0,
 	};
 }
-<<<<<<< HEAD
-=======
 
 /*
 	this function allows overriding any string-valued config option with
@@ -451,4 +449,3 @@ function applyEnvOverrides(config: Source) {
 	_apply_top([['maxFileSize', 'maxNoteLength', 'pidFile']]);
 	_apply_top(['import', ['downloadTimeout', 'maxFileSize']]);
 }
->>>>>>> 8d9781876 (merge: merge up to 2024.5.0 (!537))

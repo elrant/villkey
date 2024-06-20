@@ -1,10 +1,10 @@
 {
 	"name": "villkey",
 	"codename": "veeter",
-	"version": "2024.5.1",
+	"version": "2024.5.1.1",
 	"repository": {
 		"type": "git",
-		"url": "https://activitypub.software/TransFem-org/Sharkey.git"
+		"url": "https://git.elrant.team/elrant/villkey.git"
 	},
 	"packageManager": "pnpm@9.0.6",
 	"workspaces": [

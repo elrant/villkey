@@ -27,7 +27,7 @@ const modal = shallowRef<InstanceType<typeof MkModal>>();
 
 const whatIsNew = () => {
 	modal.value?.close();
-	window.open(`https://activitypub.software/TransFem-org/Sharkey/-/releases/${version}`, '_blank');
+	window.open(`https://git.elrant.team/elrant/villkey/commits/branch/stable`, '_blank');
 };
 
 onMounted(() => {

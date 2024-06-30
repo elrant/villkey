@@ -20,7 +20,7 @@ block og
 	meta(property='og:description' content= summary)
 	meta(property='og:url'         content= url)
 	if videos.length
-		meta(property='twitter:card' content='summary')
+		meta(property='twitter:card' content='player')
 		each video in videos
 			meta(property='og:video'            content= media[video.id])
 			meta(property='og:video:secure_url' content= media[video.id])

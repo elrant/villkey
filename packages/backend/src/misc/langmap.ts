@@ -149,6 +149,9 @@ export const langmap = {
 	'en-US': {
 		nativeName: 'English (US)',
 	},
+	'en-VL': {
+		nativeName: 'English (Villager)',
+	},
 	'en-ZA': {
 		nativeName: 'English (South Africa)',
 	},

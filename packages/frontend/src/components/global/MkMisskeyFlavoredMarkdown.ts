@@ -251,6 +251,7 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 					}
 					case 'rotate': {
 						const degrees = safeParseFloat(token.props.args.deg) ?? 90;
+						style = `transform: rotate(${degrees}deg); transform-origin: center center;`;
 						break;
 					}
 					case 'followmouse': {

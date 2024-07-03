@@ -1,7 +1,7 @@
 {
 	"name": "villkey",
 	"codename": "veeter",
-	"version": "2024.5.2",
+	"version": "2024.5.3",
 	"repository": {
 		"type": "git",
 		"url": "https://git.elrant.team/elrant/villkey.git"
@@ -15,7 +15,7 @@
 		"packages/misskey-reversi",
 		"packages/misskey-bubble-game"
 	],
-	"private": false,
+	"private": true,
 	"scripts": {
 		"build-pre": "node ./scripts/build-pre.js",
 		"build-assets": "node ./scripts/build-assets.mjs",

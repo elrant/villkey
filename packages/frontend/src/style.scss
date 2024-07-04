@@ -1,11 +1,19 @@
 @charset "utf-8";
 
 @font-face {
-	font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+	font-display: swap;
 	font-family: 'Lexend';
 	font-style: normal;
 	font-weight: 400;
-	src: url('/static-assets/fonts/Lexend-VariableFont_wght.ttf') format('opentype');
+	src: url('/static-assets/fonts/Lexend-VariableFont_wght.woff2') format('woff2');
+}
+
+@font-face {
+	font-display: swap;
+	font-family: 'Papyrus';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Papyrus'), url('/static-assets/fonts/Papyrus.woff2') format("woff2");
 }
 
 /*

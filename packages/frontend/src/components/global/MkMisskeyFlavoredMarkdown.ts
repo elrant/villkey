@@ -205,7 +205,7 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 							token.props.args.serif ? 'serif' :
 							token.props.args.monospace ? 'monospace' :
 							token.props.args.cursive ? 'cursive' :
-							token.props.args.fantasy ? 'fantasy' :
+							token.props.args.fantasy ? 'Papyrus' :
 							token.props.args.emoji ? 'emoji' :
 							token.props.args.math ? 'math' :
 							null;
@@ -251,6 +251,7 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 					}
 					case 'rotate': {
 						const degrees = safeParseFloat(token.props.args.deg) ?? 90;
+						style = `transform: rotate(${degrees}deg); transform-origin: center center;`;
 						break;
 					}
 					case 'followmouse': {

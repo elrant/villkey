@@ -12,6 +12,7 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
 import { FastifyAdapter } from '@bull-board/fastify';
 import ms from 'ms';
 import sharp from 'sharp';
+import fetch from 'node-fetch';
 import pug from 'pug';
 import { In, IsNull } from 'typeorm';
 import fastifyStatic from '@fastify/static';
@@ -44,6 +45,7 @@ import { FeedService } from './FeedService.js';
 import { UrlPreviewService } from './UrlPreviewService.js';
 import { ClientLoggerService } from './ClientLoggerService.js';
 import type { FastifyInstance, FastifyPluginOptions, FastifyReply } from 'fastify';
+import type { Packed } from '@/misc/json-schema.js';
 
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = dirname(_filename);
@@ -191,6 +193,20 @@ export class ClientServerService {
 			metaJson: htmlSafeJsonStringify(await this.metaEntityService.packDetailed(meta)),
 			now: Date.now(),
 		};
+	}
+
+	private async getCanonMediaUrls(note: Packed<'Note'>) {
+		const media = note.cw ? [] : (note.files || []).filter(file => (file.type.startsWith('image/') || file.type.startsWith('video/')) && !file.isSensitive);
+
+		const canonMedia: { [key: string]: string } = {};
+		for (const file of media) {
+			const res = await fetch(file.url, {
+				method: 'HEAD',
+				redirect: 'manual',
+			});
+			canonMedia[file.id] = res.status === 301 ? (res.headers.get('location') ?? file.url) : file.url;
+		}
+		return canonMedia;
 	}
 
 	@bindThis
@@ -605,6 +621,7 @@ export class ClientServerService {
 				return await reply.view('note', {
 					note: _note,
 					profile,
+					media: await this.getCanonMediaUrls(_note),
 					avatarUrl: _note.user.avatarUrl,
 					// TODO: Let locale changeable by instance setting
 					summary: getNoteSummary(_note),
